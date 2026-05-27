@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Green Label Agency - Paisaje de Aprendizaje Interactivo</title>
+    <style>
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --accent-color: #d8f3dc;
+            --dark-color: #1b4332;
+            --light-color: #f8f9fa;
+            --warning-color: #ff9f1c;
+            --text-color: #333333;
+            --border-radius: 8px;
+            --compulsory-color: #e63946;
+            --optional-color: #457b9d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f5;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--dark-color), var(--primary-color));
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .grid-dashboard {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .grid-dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .card-narrative {
+            border-left-color: var(--warning-color);
+            background: linear-gradient(to right, #ffffff, #fffdf5);
+        }
+
+        h2 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Panel de Gamificación */
+        .gamification-panel {
+            background: var(--dark-color);
+            color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .progress-bar-container {
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 22px;
+            width: 100%;
+            margin: 1rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background-color: var(--warning-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .stat-box span {
+            display: block;
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--warning-color);
+        }
+
+        .insignias-container {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.15);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            opacity: 0.3;
+            transition: all 0.3s;
+            border: 1px dashed white;
+        }
+
+        .badge.unlocked {
+            opacity: 1;
+            background: var(--secondary-color);
+            border-style: solid;
+            box-shadow: 0 0 8px rgba(255,255,255,0.6);
+        }
+
+        /* Matriz Interactiva */
+        .matrix-title {
+            text-align: center;
+            margin: 2.5rem 0 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .matrix-container {
+            overflow-x: auto;
+            margin-bottom: 3rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .matrix-table th {
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .matrix-table th.bloom-header {
+            background-color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+
+        .matrix-table td.intelligence-header {
+            background-color: #f8fafc;
+            color: var(--dark-color);
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: left;
+            width: 160px;
+        }
+
+        .cell-btn {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #e6fffa;
+            color: var(--dark-color);
+            border: 1px solid #b2f5ea;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.78rem;
+            transition: all 0.2s;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .cell-btn:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cell-btn.optional-btn {
+            background-color: #f0f4f8;
+            color: #334e68;
+            border: 1px dashed #9fb3c8;
+        }
+
+        .cell-btn.optional-btn:hover {
+            background-color: var(--optional-color);
+            color: white;
+        }
+
+        .cell-btn.completed {
+            background-color: #2a9d8f !important;
+            color: white !important;
+            border-color: #264653 !important;
+        }
+
+        /* Sección de Fichas Didácticas */
+        .activity-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--primary-color);
+            display: none;
+        }
+
+        .activity-card.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .activity-header h3 {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .activity-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .tag-compulsory { background-color: var(--compulsory-color); color: white; }
+        .tag-optional { background-color: var(--optional-color); color: white; }
+        .tag-bloom { background-color: #e2e8f0; color: #4a5568; }
+        .tag-mi { background-color: #feebc8; color: #c05621; }
+        .tag-ods { background-color: #e9c46a; color: #333; }
+
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-block {
+            margin-bottom: 1.25rem;
+        }
+
+        .info-block h4 {
+            color: var(--secondary-color);
+            margin-bottom: 0.35rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dua-box {
+            background-color: #f0fff4;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border-left: 4px solid #38a169;
+            margin-top: 1rem;
+        }
+
+        .dua-box h5 {
+            color: #22543d;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .support-box {
+            background-color: #fffaf0;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border-left: 4px solid #dd6b20;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .support-box h5 {
+            color: #744210;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .complete-checkbox-container {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 2px solid #edf2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn-action {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: var(--dark-color);
+        }
+
+        .btn-complete {
+            background-color: #2a9d8f;
+        }
+
+        .btn-complete:hover {
+            background-color: #1d6f64;
+        }
+
+        /* Bloque de Producto Final */
+        .project-card {
+            background: linear-gradient(135deg, #e2eafc, #edf2fb);
+            border-left: 6px solid #3a0ca3;
+            margin-top: 3rem;
+            padding: 2rem;
+        }
+
+        .project-card h2 {
+            color: #3a0ca3;
+        }
+
+        .project-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 4rem;
+            background-color: var(--dark-color);
+            color: white;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>THE GREEN LABEL AGENCY</h1>
+        <p>Paisaje de Aprendizaje Interactivo Multimodal — 10 Retos Obligatorios y 5 Retos de Ampliación Opcionales</p>
+        <p style="font-size: 1rem; margin-top: 0.5rem;">Unidad Curricular: <em>Fashion Forward: Can We Dress the Future? (4.º ESO)</em></p>
+    </header>
+
+    <div class="container">
+        
+        <div class="grid-dashboard">
+            <div class="card card-narrative">
+                <h2>諜 Dossier Inicial de Inteligencia: Operación Contranarrativa Global</h2>
+                <p><strong>¡Bienvenidos a las oficinas centrales de The Green Label Agency, agentes!</strong> El sector de la moda rápida internacional está lanzando masivas campañas digitales hiperatractivas dirigidas a vuestra generación. Sin embargo, bajo la etiqueta de "eco-consciente", muchas esconden un fraude internacional de lavado de imagen o <strong>Greenwashing</strong> (violando los principios del <strong>ODS 12</strong>).</p>
+                <p style="margin-top: 0.5rem;">Vuestro equipo de consultores de comunicación tiene una misión crítica estructurada en <strong>20 sesiones de operaciones</strong>: adentrarse en la matriz de inteligencia, resolver los 10 nodos operativos obligatorios para estructurar pruebas lingüísticas sólidas y utilizar los 5 nodos opcionales avanzados para potenciar vuestro rango. Todo el conocimiento confluirá en el diseño de una campaña global de contranarrativa en inglés titulada <strong>"The Truth Behind the Label"</strong>. ¡Es hora de activar vuestro mapa interactivo corporativo!</p>
+            </div>
+
+            <div class="card gamification-panel" id="gamification">
+                <div>
+                    <h2>📊 Rango Operativo de la Agencia</h2>
+                    <div style="font-size: 1.3rem; font-weight: bold; color: var(--warning-color); margin-bottom: 0.25rem;" id="agent-rank">Agente en Prácticas (Aprendiz)</div>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                    
+                    <div class="stats">
+                        <div class="stat-box">
+                            <span id="xp-counter">0</span> XP Acumulados
+                        </div>
+                        <div class="stat-box">
+                            <span id="completed-counter">0 / 15</span> Retos Resueltos
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 style="font-size: 0.9rem; text-transform: uppercase; color: #cbd5e1;">🎖️ Insignias de la Misión:</h4>
+                    <div class="insignias-container">
+                        <div class="badge" id="badge-1">Fact Checker</div>
+                        <div class="badge" id="badge-2">Green Voice</div>
+                        <div class="badge" id="badge-3">Creative Activist</div>
+                        <div class="badge" id="badge-4">Master Debater</div>
+                        <div class="badge" id="badge-5">Top Agent</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="matrix-title">🗺️ Cuadrante de Operaciones: Matriz de Aprendizaje Flexible</h2>
+        <p style="text-align: center; margin-bottom: 1.5rem; color: #4a5568; font-size: 0.95rem;">Selecciona cualquier celda para cargar de forma interactiva el dossier técnico del reto y empezar la investigación.</p>
+        
+        <div class="matrix-container">
+            <table class="matrix-table">
+                <thead>
+                    <tr>
+                        <th class="bloom-header">Inteligencias / Bloom</th>
+                        <th>1. RECORDAR</th>
+                        <th>2. COMPRENDER</th>
+                        <th>3. APLICAR</th>
+                        <th>4. ANALIZAR</th>
+                        <th>5. EVALUAR</th>
+                        <th>6. CREAR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="intelligence-header">Lingüístico-Verbal</td>
+                        <td><button class="cell-btn" onclick="showActivity('act1')">Reto 1: Fast Fashion Glossary</button></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act2')">Reto 2: The Great Sustainable Debate</button></td>
+                        <td><button class="cell-btn optional-btn" onclick="showActivity('act3')">Reto 3 (Op): Complex Manifesto</button></td>
+                    </tr>
+                    <tr>
+                        <td class="intelligence-header">Lógico-Matemática</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act4')">Reto 4: Data Into Words Report</button></td>
+                        <td>-</td>
+                        <td><button class="cell-btn optional-btn" onclick="showActivity('act5')">Reto 5 (Op): Metric-Driven Brand Audit</button></td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td class="intelligence-header">Visual-Espacial</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act6')">Reto 6: Decoding Ad Traps</button></td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act7')">Reto 7: Campaign Infographic</button></td>
+                    </tr>
+                    <tr>
+                        <td class="intelligence-header">Musical / Auditiva</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act8')">Reto 8: The Eco-Audio Pitch</button></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn optional-btn" onclick="showActivity('act12')">Reto 12 (Op): Sustainable Jingle</button></td>
+                    </tr>
+                    <tr>
+                        <td class="intelligence-header">Interpersonal</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act13')">Reto 13: The Green Assembly Pitch</button></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act9')">Reto 9: The Consciousness Reel</button></td>
+                    </tr>
+                    <tr>
+                        <td class="intelligence-header">Intrapersonal</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act10')">Reto 10: Agent's Self-Audit Journal</button></td>
+                        <td><button class="cell-btn optional-btn" onclick="showActivity('act15')">Reto 15 (Op): My Ethical Capsule</button></td>
+                    </tr>
+                    <tr>
+                        <td class="intelligence-header">Naturalista</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><button class="cell-btn" onclick="showActivity('act14')">Reto 14: Eco-Label Classification</button></td>
+                        <td><button class="cell-btn optional-btn" onclick="showActivity('act11')">Reto 11 (Op): Supply Chain Inquiry</button></td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="activities-section" id="activities-area">
+            
+            <div class="activity-card" id="act1">
+                <div class="activity-header">
+                    <h3>Reto 1: Fast Fashion Glossary & Interactive Match</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">1. Recordar</span>
+                        <span class="tag tag-mi">Lingüístico-Verbal</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Identificar y definir vocabulario temático clave de la industria textil y la sostenibilidad medioambiental en lengua inglesa.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"What is the true cost of a 5€ t-shirt? Can you identify the hidden terminology behind its production tag?"</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos navegan por un panel digital de tarjetas conceptuales donde deben asociar términos especializados en inglés (<em>greenwashing, upcycling, ethical consumption, carbon footprint, textile waste</em>) con sus respectivas definiciones técnicas de corte auténtico.</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de representación:</strong> Glosario multimedia dotado de apoyo visual icónico y descripciones de audio para evitar barreras de descodificación de texto.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>Dislexia / A2:</strong> Tarjetas adaptadas con tipografía accesible, definiciones recortadas y bilingües. <strong>Altas Capacidades:</strong> Deben introducir tres términos adicionales autogestionados (e.g., <em>planned obsolescence</em>) en inglés académico.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Glosario individual interactivo completado con reporte de aciertos.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>1 sesión (50 min) | Trabajo Individual.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 1.3 Inferencia de vocabulario por contexto.<br><strong>Instrumento:</strong> Registro digital automatizado de la tarea.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>100 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act1', 100, 'badge-1')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act2">
+                <div class="activity-header">
+                    <h3>Reto 2: The Great Sustainable Debate Panel</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">5. Evaluar</span>
+                        <span class="tag tag-mi">Lingüístico-Verbal</span>
+                        <span class="tag tag-ods">ODS 12 & 8</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Participar en un debate oral estructurado defendiendo posturas contrapuestas sobre consumo textil mediante conectores de contraste y estructuras argumentativas.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can the fashion industry ever be truly sustainable, or is global capitalism intrinsically tied to environmental waste?"</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Simulación de un panel internacional de debate. Los alumnos asumen roles asignados (activistas de Greenpeace, CEOs de multinacionales de fast fashion, trabajadores textiles, consumidores). Utilizan oraciones condicionales tipo 1 y 2 para argumentar consecuencias futuras.</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de implicación:</strong> Dinámica de juego de rol cooperativo con objetivos individuales y colectivos que fomentan la interacción social de alto compromiso.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>TDAH / A2:</strong> Tarjetas de rol guiadas paso a paso con estructuras lingüísticas de apoyo (<em>"Sentence starters"</em>: <em>I strongly believe that if we...</em>) y temporizador visual estricto por intervenciones.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Intervención oral argumentada en el debate presencial y escaleta escrita de ideas básicas.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>2 sesiones | Equipos Cooperativos por Roles.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 3.2 Participación activa en intercambios orales estructurados.<br><strong>Instrumento:</strong> Rúbrica de Expresión e Interacción Oral.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>200 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act2', 200, 'badge-4')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act3">
+                <div class="activity-header">
+                    <h3>Reto 3 (Opcional): Complex Agency Manifesto</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-optional">Opcional (Ampliación)</span>
+                        <span class="tag tag-bloom">6. Crear</span>
+                        <span class="tag tag-mi">Lingüístico-Verbal</span>
+                        <span class="tag tag-ods">ODS 12 & 13</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Redactar un manifiesto ético complejo de nivel avanzado (B2) que apele al compromiso social directo mediante un uso riguroso de la voz pasiva impersonal.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can words change a generation's purchasing behavior? Write a powerful, high-impact textual manifesto for Gen-Z."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Reto de profundización individual para alumnos avanzados o con altas capacidades. Consiste en la producción formal de la declaración de principios éticos de la agencia, integrando construcciones complejas (e.g., <em>"It is estimated that tons of clothes are burned daily..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de acción y expresión:</strong> Libertad total en la estructuración estilística y opción de publicar el texto final en un blog o revista del centro escolar.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Manifiesto argumentativo en inglés (200-250 palabras).</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>Trabajo Autónomo | Individual.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 2.1 Escritura de textos argumentativos estructurados.<br><strong>Instrumento:</strong> Escala cualitativa de corrección gramatical y cohesión estilística.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP Extra</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act3', 150, 'badge-2')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act4">
+                <div class="activity-header">
+                    <h3>Reto 4: Data Into Words — Environmental Impact Report</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">2. Comprender</span>
+                        <span class="tag tag-mi">Lógico-Matemática</span>
+                        <span class="tag tag-ods">ODS 12 & 13</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Interpretar y transponer datos estadísticos e infografías complejas sobre huella hídrica y de carbono textil a un informe explicativo estructurado en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can you calculate the precise liters of water your current outfit required? Let's decode corporate numbers."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos analizan gráficos de barras y diagramas de sectores que reflejan el volumen de recursos naturales devorados por la producción textil masiva. Redactan un informe técnico breve aplicando comparativos avanzados y conectores de causa y consecuencia (<em>therefore, consequently, due to</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de representación:</strong> Exposición de la información estadística mediante formatos duales (tablas numéricas puras combinadas con gráficos interactivos de barras cromáticas).</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>Dislexia / TDAH:</strong> Gráficos limpios de alto contraste y un documento base estructurado con espacios de rellenado guiados paso a paso para pautar la redacción.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Data Report explicativo cumplimentado en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>2 sesiones | Parejas Heterogéneas.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 1.1 Identificación de ideas principales y secundarias en textos factuales.<br><strong>Instrumento:</strong> Guía de corrección analítica del informe científico.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>100 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act4', 100, 'badge-1')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act5">
+                <div class="activity-header">
+                    <h3>Reto 5 (Opcional): Metric-Driven Brand Transparency Audit</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-optional">Opcional (Ampliación)</span>
+                        <span class="tag tag-bloom">4. Analizar</span>
+                        <span class="tag tag-mi">Lógico-Matemática</span>
+                        <span class="tag tag-ods">ODS 12 & 8</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Analizar y auditar memorias oficiales corporativas de dos firmas internacionales, calculando porcentajes reales de trazabilidad e índices éticos de su cadena de producción.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Are corporate corporate reports 100% transparent? Let's check the global Fashion Transparency Index matrix."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos con ritmo avanzado consultan bases de datos e índices internacionales de transparencia de marcas reales de moda. Elaboran tablas matemáticas comparativas de salarios dignos y emisiones gaseosas, redactando conclusiones estadísticas complejas integrando condicionales de tipo 3 (e.g., <em>"If the company had invested more, workers' conditions would have improved..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de implicación:</strong> Capacidad de libre elección sobre las marcas comerciales de su entorno habitual para ser auditadas críticamente en el aula.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Matriz de auditoría comparativa de marcas en formato PDF analítico.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>1.5 sesiones | Trabajo por parejas avanzadas.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 6.2 Reflexión analítica y crítica sobre discursos de marca y publicidad.<br><strong>Instrumento:</strong> Rúbrica cualitativa de pensamiento crítico y análisis formal.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP Extra</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act5', 150, 'badge-5')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act6">
+                <div class="activity-header">
+                    <h3>Reto 6: Decoding Ad Traps — Greenwashing Visual Deconstruction</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">4. Analizar</span>
+                        <span class="tag tag-mi">Visual-Espacial</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Analizar discursos publicitarios de carácter visual y textual extrayendo falacias lógicas y estrategias estéticas manipulativas de lavado verde.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Why does corporate advertising massively employ natural imagery? What elements are they visual-masking?"</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos seleccionan carteles publicitarios impresos o digitales de marcas que usan engaños ecológicos habituales. Mediante herramientas de anotación gráfica digital, incrustan flechas y comentarios explicativos en inglés usando el *Reported Speech* (e.g., <em>"The marketing department stated that their fabric was completely ecological, but it is proved that..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de representación:</strong> Enfoque de análisis basado enteramente en imágenes dinámicas e iconografía publicitaria, reduciendo la dependencia de formatos textuales abstractos lineales.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>TDAH / Dislexia:</strong> Plantillas organizadas por cajas de colores visuales fijos para ordenar los comentarios (Caja Roja: Imagen Trampa; Caja Azul: Texto Engañoso), minimizando la sobrecarga cognitiva.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Anuncio publicitario deconstruido digitalmente con capas textuales explicativas en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>2 sesiones | Equipos Cooperativos de Trabajo.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 6.2 Reflexión crítica sobre discursos de marca mediáticos.<br><strong>Instrumento:</strong> Escala de observación docente de indicadores analíticos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act6', 150, 'badge-1')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act7">
+                <div class="activity-header">
+                    <h3>Reto 7: Campaign Infographic Design</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">6. Crear</span>
+                        <span class="tag tag-mi">Visual-Espacial</span>
+                        <span class="tag tag-ods">ODS 12 & 13</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Diseñar un cartel o infografía digital interactiva combinando códigos estéticos con enunciados argumentativos precisos para concienciar al centro escolar.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Design a visual piece so powerful that a teenager would stop scrolling on Instagram to read it. Make data click."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los equipos utilizan plataformas de diseño (Canva, Slides) para modelar la infografía oficial de su agencia. Sintetizan la información de los retos de investigación previos en cápsulas visuales, aplicando obligatoriamente la voz pasiva presente para narrar impactos ambientales (e.g., <em>"Rivers are polluted by industrial chemical dyes..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de acción y expresión:</strong> Uso de herramientas de maquetación digital de vanguardia que permiten volcar conocimiento a través de iconos, formas y mapas de color estructurados.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>A2 / Incorporación Tardía:</strong> Disposición de una librería de iconos preseleccionados y un banco estructurado de oraciones de nivel inicial (<em>Don't waste, Buy less</em>) para facilitar la ejecución.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Infografía digital interactiva cargada en el dossier corporativo del grupo.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>3 sesiones | Equipos Cooperativos con roles asignados.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 2.3 Creación de productos multimodales integrando recursos digitales.<br><strong>Instrumento:</strong> Matriz de Coevaluación Inter-Equipos estructurada.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>200 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act7', 200, 'badge-3')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act8">
+                <div class="activity-header">
+                    <h3>Reto 8: The Eco-Audio Pitch — Micro-Podcast Campaign</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">3. Aplicar</span>
+                        <span class="tag tag-mi">Musical / Auditiva</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Grabar una cuña publicitaria oral en inglés aplicando patrones acentuales, de ritmo y entonación adecuados para persuadir a oyentes de su misma edad.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can you change a person's shopping habit just through the tone of your voice? Let's record a persuasive audio tract."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos escriben el guion formal de una cuña de audio persuasiva. Ensayan pautas fonéticas de especial dificultad y graban la pieza insertando efectos de sonido contextuales o de ambiente que enfaticen la seriedad de la crisis climática de la industria de la moda rápida.</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de acción y expresión:</strong> El uso del soporte de audio diferido permite a estudiantes con timidez o dificultades comunicativas ensayar, regrabar y pulir su discurso oral sin exposición directa inmediata.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>Dislexia:</strong> Guiones de locución adaptados mediante tipografías legibles y organizados por bloques cromáticos diferenciados por cada participante.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Archivo de audio en formato digital (2 min) y transcripción textual adjunta.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>3 sesiones | Trabajo en Parejas o Tríos.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 2.3 Creación de artefactos multimodales en inglés.<br><strong>Instrumento:</strong> Rúbrica analítica de Expresión Oral Digital.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act8', 150, 'badge-2')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act9">
+                <div class="activity-header">
+                    <h3>Reto 9: The Consciousness Reel — TikTok/Reel Engagement</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">6. Crear</span>
+                        <span class="tag tag-mi">Interpersonal</span>
+                        <span class="tag tag-ods">ODS 12 & 10</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Producir un videoclip de formato vertical con subtítulos integrados coordinando de forma empática un trabajo cooperativo en equipo de marketing.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can we make ethical consumption go viral? Transform massive fast fashion hauls into an interactive anti-haul clip."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos diseñan un video en formato de "anti-haul", revirtiendo críticamente las dinámicas de redes sociales donde se presume de compras masivas hiperbaratas. Coordinan diálogos rápidos frente a la cámara, subtitulado en inglés y transiciones dinámicas.</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de implicación:</strong> Formato directamente alineado con las plataformas de redes sociales de uso diario del alumnado, conectando sus aficiones con las metas del ODS 12.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>TDAH:</strong> Segmentación cerrada de tareas operativas cortas en el set (un estudiante cronometra los clips, otro revisa el guion, otro edita pistas de texto), asegurando dinamismo físico.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Vídeo en formato vertical editado con subtítulos interactivos completos en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>3 sesiones | Equipos Cooperativos Estructurados.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 2.3 Productos multimodales / 3.2 Escucha activa y respeto corporativo.<br><strong>Instrumento:</strong> Escala analítica de coevaluación de la dinámica de grupo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>200 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act9', 200, 'badge-3')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act10">
+                <div class="activity-header">
+                    <h3>Reto 10: Agent's Self-Audit & Reflection Journal</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">5. Evaluar</span>
+                        <span class="tag tag-mi">Intrapersonal</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Monitorear el proceso individual de aprendizaje lingüístico y la asimilación del consumo consciente a través de un diario de reflexión metacognitiva en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Look closely at your daily habits: Who were you as a shopper before this agency, and who are you becoming now?"</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos realizan una parada reflexiva personal. Responden a preguntas de autoevaluación lingüística y de impacto ambiental sobre su propio entorno diario, completando una diana gráfica de competencias adquiridas.</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de acción y expresión:</strong> El diario metacognitivo acepta entregas escritas estándar, esquemas de mapas mentales o pequeños video-diarios orales privados.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>Alumnos A2:</strong> Disposición de una guía estructurada de rellenado (<em>"Sentence frames"</em> como: <em>I have realized that... The most complex grammar structure was...</em>) para andamiar el plano escrito.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Diario de reflexión personal completado y Diana de Autoevaluación Lingüística.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>1 sesión | Trabajo Individual Autoregulado.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 5.1 Reflexión individual sobre el funcionamiento de la propia lengua para ganar autonomía.<br><strong>Instrumento:</strong> Diana cualitativa de autoevaluación guiada.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>100 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act10', 100, 'badge-5')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act11">
+                <div class="activity-header">
+                    <h3>Reto 11 (Opcional): Supply Chain Traceability Inquiry</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-optional">Opcional (Ampliación)</span>
+                        <span class="tag tag-bloom">4. Analizar</span>
+                        <span class="tag tag-mi">Naturalista</span>
+                        <span class="tag tag-ods">ODS 12, 13 & 15</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Rastrear detalladamente el ciclo de vida ecológico de materiales textiles complejos, reportando el impacto geográfico de monocultivos de algodón y tintes químicos en ecosistemas en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Where does polyester clothing end up when discarded? Let's track its physical journey down to marine toxic landfills."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Reto de profundización científica. Los estudiantes analizan el impacto de la degradación por microplásticos en el agua. Modelan un mapamundi dinámico anotando detalladamente las fases de producción masiva mediante el uso riguroso de la voz pasiva en pasado (e.g., <em>"Chemicals were dumped... Large ecosystems were severely degraded..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de representación:</strong> Acceso a simuladores satelitales cartográficos interactivos y documentales breves con transcripción textual activable.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Mapa digital interactivo de trazabilidad material con descripciones científicas en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>Reto Autónomo | Individual o Parejas de Ampliación.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 1.1 Extracción de datos principales en discursos sobre medioambiente.<br><strong>Instrumento:</strong> Rúbrica cualitativa de proyecto investigativo avanzado.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP Extra</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act11', 150, 'badge-1')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act12">
+                <div class="activity-header">
+                    <h3>Reto 12 (Opcional): The Sustainable Jingle — Creative Audio Remix</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-optional">Opcional (Ampliación)</span>
+                        <span class="tag tag-bloom">6. Crear</span>
+                        <span class="tag tag-mi">Musical / Auditiva</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Componer y musicalizar una breve canción publicitaria o sintonía ética en inglés, aplicando métrica rítmica y rimas fonéticas para potenciar un mensaje de consumo ético.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can a catchy melody dismantle corporate lies? Remix a popular musical trend with ecological lyrics."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos con marcados intereses musicales componen una base instrumental corta o usan software libre de edición para insertar rimas en inglés enfocadas en el *upcycling* y el rechazo a las marcas de *fast fashion*. Deben cuidar los patrones acentuales de los verbos y términos técnicos.</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de acción y expresión:</strong> Expresión creativa mediante canales puramente rítmicos y musicales, potenciando inteligencias no tradicionales en la materia.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Archivo de audio remixado (Jingle publicitario de 1 min) con letra adjunta.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>Trabajo Autónomo | Individual o Parejas.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 2.3 Creación de productos multimodales con herramientas digitales.<br><strong>Instrumento:</strong> Escala cualitativa de creatividad y precisión fonética.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP Extra</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act12', 150, 'badge-3')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act13">
+                <div class="activity-header">
+                    <h3>Reto 13: The Green Assembly Pitch — Cooperative Negotiation</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">3. Aplicar</span>
+                        <span class="tag tag-mi">Interpersonal</span>
+                        <span class="tag tag-ods">ODS 12 & 10</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Interactuar cara a cara negociando propuestas de acción sostenible para el centro escolar, utilizando fórmulas de acuerdo, desacuerdo y contraargumentación formal en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can your team agree on the top 3 measures to reduce textile waste in our high school? Let's negotiate."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Simulación de una junta internacional de directores de la agencia. Cada equipo debe plantear una serie de iniciativas realistas para el instituto (e.g., mercadillos de intercambio de ropa). Se puntúa la capacidad de rebatir con cortesía y llegar a un consenso unificado empleando estructuras de interacción (<em>"From my perspective...", "I see your point, however..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de implicación:</strong> Aprendizaje cooperativo estructurado mediante dinámicas de asamblea democrática activa, estimulando la cohesión social del grupo.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>Alumnos A2 / Incorporación Tardía:</strong> Disposición de un panel físico de cartas con frases estructuradas fijas para intervenir de inmediato en las fases de debate de forma segura.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Acta formal de la asamblea con las 3 propuestas colectivas redactadas en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>2 sesiones | Equipos Cooperativos (Mesas Redondas).</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 3.2 Interacción en situaciones comunicativas con actitud de escucha y respeto.<br><strong>Instrumento:</strong> Registro de observación docente y rúbrica cooperativa.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act13', 150, 'badge-4')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act14">
+                <div class="activity-header">
+                    <h3>Reto 14: Eco-Label Classification — Classification Matrix</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-compulsory">Obligatoria</span>
+                        <span class="tag tag-bloom">3. Aplicar</span>
+                        <span class="tag tag-mi">Naturalista</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Clasificar certificaciones oficiales textiles globales (GOTS, OEKO-TEX, Fair Trade) analizando de forma práctica las exigencias medioambientales de sus normativas reguladoras.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Not all labels mean ecological safety. Can you distinguish real eco-certifications from fake marketing icons?"</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Los alumnos actúan como científicos auditores de la agencia. Analizan muestras físicas o digitales de etiquetas textiles, catalogándolas en una matriz técnica según los criterios e impactos biológicos controlados en sus procesos (uso de pesticidas, tóxicos químicos, origen orgánico de las fibras).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de representación:</strong> Manejo de elementos manipulativos visuales de etiquetas de prendas reales, aportando un canal cinestésico y empírico al aula de idiomas.</p>
+                        </div>
+                        <div class="support-box">
+                            <h5>🧱 Andamiaje NEAE / Diferenciación</h5>
+                            <p><strong>Dislexia / TDAH:</strong> Textos informativos de cada certificación reducidos, maquetados con fuentes tipográficas amplias y esquemas iconográficos simplificados de alta carga visual.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Cuadro de clasificación técnica de etiquetas completado formalmente en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>1 sesión (50 min) | Trabajo por Parejas.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 1.1 Extracción de datos específicos en textos informativos sobre sostenibilidad.<br><strong>Instrumento:</strong> Escala de verificación de idoneidad analítica.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>100 XP</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act14', 100, 'badge-1')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+            <div class="activity-card" id="act15">
+                <div class="activity-header">
+                    <h3>Reto 15 (Opcional): My Ethical Capsule Wardrobe — Design Challenge</h3>
+                    <div class="activity-tags">
+                        <span class="tag tag-optional">Opcional (Ampliación)</span>
+                        <span class="tag tag-bloom">6. Crear</span>
+                        <span class="tag tag-mi">Intrapersonal</span>
+                        <span class="tag tag-ods">ODS 12</span>
+                    </div>
+                </div>
+                <div class="activity-grid">
+                    <div>
+                        <div class="info-block">
+                            <h4>🎯 Objetivo de Aprendizaje</h4>
+                            <p>Diseñar una propuesta personal razonada de armario cápsula sostenible de un número limitado de prendas, justificando críticamente la versatilidad de cada elección en inglés técnico.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>❓ Desafío Inicial</h4>
+                            <p>"Can you live an entire season stylishly with only 10 clothes? Let's model your ultimate personal minimalist wardrobe."</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>📝 Descripción</h4>
+                            <p>Reto enfocado a potenciar la autorregulación y la conciencia de consumo individual. El alumnado diseña su propio catálogo minimalista de indumentaria ética, justificando por escrito el uso extensivo de las prendas mediante condicionales de tipo 2 (e.g., <em>"If I combined this item with those sneakers, I would obtain three different formal outfits..."</em>).</p>
+                        </div>
+                        <div class="dua-box">
+                            <h5>🧠 Estrategia DUA Aplicada</h5>
+                            <p><strong>Múltiples formas de acción y expresión:</strong> Admite la maquetación a través de collages fotográficos digitales, bocetos artísticos a mano o presentaciones guiadas explicativas.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-block">
+                            <h4>📦 Producto Esperado</h4>
+                            <p>Dossier visual o catálogo digital interactivo de "Armario Cápsula Sostenible" en inglés.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⏱️ Tiempo & Modalidad</h4>
+                            <p>Trabajo Autónomo | Individual.</p>
+                        </div>
+                        <div class="info-block">
+                            <h4>⚖️ Evaluación</h4>
+                            <p><strong>Criterio:</strong> 2.1 Escritura argumentativa con corrección lingüística propia de nivel.<br><strong>Instrumento:</strong> Escala de valoración cualitativa de proyectos de diseño ético.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="complete-checkbox-container">
+                    <p>Recompensa operativa: <strong>150 XP Extra</strong></p>
+                    <button class="btn-action btn-complete" onclick="completeActivity('act15', 150, 'badge-5')">Validar Reto Completado ✔</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card project-card">
+            <h2>🚀 Proyecto Integrador Final: Campaña Global "The Truth Behind the Label"</h2>
+            <p style="margin-bottom: 1rem; font-size: 1.05rem;">Al finalizar las sesiones de operaciones y completar el itinerario interactivo del mapa, todos los materiales, audios, carteles y vídeos ejecutados en la matriz se unifican de forma coherente en el producto final corporativo exigido por la directiva de la agencia.</p>
+            <div style="background-color: white; padding: 1.5rem; border-radius: 6px; border-left: 5px solid #3a0ca3;">
+                <p><strong>Elementos Clave Constitutivos de la Campaña Multimodal:</strong></p>
+                <ul class="project-list" style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li><strong>Artefacto Audiovisual Central:</strong> Un vídeo vertical editado (TikTok/Reel) o micro-podcast persuasivo de 2-3 minutos en inglés que actúe como pieza de contranarrativa publicitaria real.</li>
+                    <li><strong>Dossier Gráfico de Respaldo:</strong> Una infografía maquetada en Canva con datos rigurosos y verificados sobre la huella hídrica y de carbono textil para su exposición en el instituto.</li>
+                    <li><strong>Presentación Escrita Formal:</strong> Un texto argumentativo estructurado en inglés detallando el público objetivo joven seleccionado, los canales idóneos de difusión escolar y el marco del ODS 12.</li>
+                    <li><strong>Licitación Presencial (Pitch Profesional):</strong> Defensa y exposición oral en directo ante un jurado de expertos del sector (la clase y el docente), simulando una competición corporativa de marketing internacional.</li>
+                </ul>
+            </div>
+            <p style="margin-top: 1.25rem; font-size: 0.92rem; color: #4a5568;"><strong>Sistemas de Evaluación Auténtica:</strong> Aplicación estricta de la Rúbrica Analítica de la Campaña Multimodal (alineada con las Competencias Específicas 2 y 6 de la LOMLOE), Rúbrica Formal de Interacción Oral en el Pitch y Dianas Cualitativas de Coevaluación entre las diferentes agencias de clase.</p>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 The Green Label Agency — Formación Pedagógica en Lengua Extranjera (4.º ESO)</p>
+        <p style="font-size: 0.78rem; opacity: 0.8; margin-top: 0.5rem;">Estructura didáctica gamificada diseñada bajo los principios del Diseño Universal para el Aprendizaje, la Taxonomía de Bloom y el ODS 12 de la Agenda 2030.</p>
+    </footer>
+
+    <script>
+        // Estado de la gamificación en memoria activa de la sesión escolar
+        let currentXP = 0;
+        let completedCount = 0;
+        const totalActivitiesInMatrix = 15; // 10 obligatorias + 5 opcionales
+        const completedActivitiesRegistry = new Set();
+
+        function showActivity(activityId) {
+            // Ocultar todas las tarjetas de retos
+            const cards = document.querySelectorAll('.activity-card');
+            cards.forEach(card => card.classList.remove('active'));
+            
+            // Mostrar y hacer scroll suave hacia la ficha seleccionada de la matriz
+            const selectedVolume = document.getElementById(activityId);
+            if (selectedVolume) {
+                selectedVolume.classList.add('active');
+                selectedVolume.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function completeActivity(activityId, xpGained, badgeId) {
+            // Evitar duplicación de puntos de experiencia si el reto ya está resuelto
+            if (completedActivitiesRegistry.has(activityId)) {
+                alert("Este dossier de operaciones ya ha sido validado y sellado por la central de la agencia.");
+                return;
+            }
+
+            // Registrar reto superado
+            completedActivitiesRegistry.add(activityId);
+            currentXP += xpGained;
+            completedCount++;
+
+            // Actualizar interfaz del panel de control de gamificación en tiempo real
+            document.getElementById('xp-counter').innerText = currentXP;
+            document.getElementById('completed-counter').innerText = `${completedCount} / ${totalActivitiesInMatrix}`;
+            
+            // Modificar de forma interactiva el estado del botón en la tabla superior
+            const buttons = document.querySelectorAll(`button[onclick="showActivity('${activityId}')"]`);
+            buttons.forEach(btn => btn.classList.add('completed'));
+
+            // Calcular porcentaje real del progreso general
+            let realPercentage = (completedCount / totalActivitiesInMatrix) * 100;
+            document.getElementById('progress-bar').style.width = `${realPercentage}%`;
+
+            // Desbloquear la insignia vinculada visualmente en el panel lateral
+            if (badgeId) {
+                const badgeElement = document.getElementById(badgeId);
+                if (badgeElement) {
+                    badgeElement.classList.add('unlocked');
+                }
+            }
+
+            // Sistema de escalonamiento dinámico de Rangos Operativos según XP acumulados
+            let newRank = "Agente en Prácticas (Aprendiz)";
+            if (currentXP >= 150 && currentXP < 350) {
+                newRank = "Investigador Analista de Campo";
+            } else if (currentXP >= 350 && currentXP < 600) {
+                newRank = "Especialista Consultor en ODS";
+                document.getElementById('badge-2').classList.add('unlocked');
+            } else if (currentXP >= 600 && currentXP < 900) {
+                newRank = "Agente Senior Green Label";
+                document.getElementById('badge-3').classList.add('unlocked');
+            } else if (currentXP >= 900) {
+                newRank = "🎯 Director de Campaña Global de la Agencia";
+                document.getElementById('badge-5').classList.add('unlocked');
+            }
+            document.getElementById('agent-rank').innerText = newRank;
+
+            // Alerta motivacional de feedback inmediato para el grupo
+            alert(`¡Excelente trabajo, equipo! Misión operativa validada. Habéis sumado +${xpGained} XP y actualizado vuestro perfil de inteligencia.`);
+        }
+    </script>
+</body>
+</html>
